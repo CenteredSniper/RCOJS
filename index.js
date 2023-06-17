@@ -6,6 +6,7 @@ const ProgramFilesPath = "C:/Program Files (x86)/Roblox/Versions"
 const AppDataPath = process.env.APPDATA + "/../Local/Roblox/Versions"
 const FPSPrompt = prompt("Set FPS as: ");
 const QuickGameLaunch = prompt("Enable QuickGameLaunch: ");
+const Vulkan = prompt("Enable Vulkan: ");
 
 var isElevated;
 var ClientAppSettings
@@ -40,6 +41,10 @@ function AddRCO(Path) {
 	});
 }
 
+function CheckIfTrue(Value) {
+	return QuickGameLaunch == "y" || QuickGameLaunch == "yes" || QuickGameLaunch == "n" && false || QuickGameLaunch == "no" && false || QuickGameLaunch == "true" || QuickGameLaunch == "false" && false || false
+}
+
 request('https://roblox-client-optimizer.simulhost.com/ClientAppSettings.json', function (error, response, body) {
 	if (!error && response.statusCode == 200) {
 		ClientAppSettings = JSON.parse(body)
@@ -47,8 +52,19 @@ request('https://roblox-client-optimizer.simulhost.com/ClientAppSettings.json', 
 		let FPS = FPSPrompt && !isNaN(FPSPrompt) && Math.round(Number(FPSPrompt)) || 240
 		ClientAppSettings.DFIntTaskSchedulerTargetFps = FPS
 
-		ClientAppSettings.QuickGameLaunch = QuickGameLaunch == "y" && true || QuickGameLaunch == "yes" && true || QuickGameLaunch == "n" && false || QuickGameLaunch == "no" && false || QuickGameLaunch == "true" && true || QuickGameLaunch == "false" && false || false
+		if (CheckIfTrue(QuickGameLaunch)) {
+			ClientAppSettings.QuickGameLaunch = true
+		}
 		
+
+		if (CheckIfTrue(Vulkan)) {
+			ClientAppSettings.FFlagDebugGraphicsPreferD3D11 = false
+			ClientAppSettings.FFlagDebugGraphicsPreferD3D11FL10 = false
+			ClientAppSettings.FFlagDebugGraphicsPreferOpenGL = false
+			ClientAppSettings.FFlagDebugGraphicsPreferVulkan = true
+			ClientAppSettings.FFlagDebugGraphicsDisableDirect3D11 = true
+		}
+
 		ClientAppSettings = JSON.stringify(ClientAppSettings, null, "\t")
 
 		if (isElevated) {
