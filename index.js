@@ -42,7 +42,7 @@ function AddRCO(Path) {
 }
 
 function CheckIfTrue(Value) {
-	return QuickGameLaunch == "y" || QuickGameLaunch == "yes" || QuickGameLaunch == "n" && false || QuickGameLaunch == "no" && false || QuickGameLaunch == "true" || QuickGameLaunch == "false" && false || false
+	return Value == "y" || Value == "yes" || Value == "n" && false || Value == "no" && false || Value == "true" || Value == "false" && false || false
 }
 
 request('https://roblox-client-optimizer.simulhost.com/ClientAppSettings.json', function (error, response, body) {
